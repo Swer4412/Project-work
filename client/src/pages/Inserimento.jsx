@@ -3,9 +3,9 @@ import React from 'react';
 const Inserimento = () => {
     return (
         <div>
-            Pagina inserimento (protetta)
+            Pagina Inserimento
         </div>
     );
 };
 
-export default Inserimento
+export default Inserimento;
