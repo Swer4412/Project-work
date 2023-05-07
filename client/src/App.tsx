@@ -1,33 +1,19 @@
-import {useState, useEffect} from "react"
-
-interface BackendData {
-  _id: {
-    $oid: string;
-  };
-  msg: string;
-  list: number[];
-}
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import Login from "./pages/Login";
+import ProtectedRoutes from './pages/ProtectedRoutes';
+import Inserimento from './pages/Inserimento';
+import Elenco from './pages/elenco';
 
 const App = () => {
-  
-  const [backendData, setBackendData] = useState<BackendData | undefined>(undefined);
-
-  useEffect(() => {
-    fetch("http://localhost:5000/users")
-      .then((response) => response.json())
-      .then((data: BackendData[]) => {
-        setBackendData(data[0]);
-      });
-  }, []);
-
   return (
-    <div>
-      {!backendData ? (
-        <p>Loading...</p>
-      ) : (
-        backendData.list.map((item:any, i:any) => <p key={i}>{item}</p>)
-      )}
-    </div>
+    <Routes>
+      <Route path="/" element={<Login/>}/>
+      <Route element={<ProtectedRoutes/>}>
+        <Route path='/elenco' element={<Elenco/>}/>
+        <Route path='/' element={<Inserimento/>}>
+      </Route>
+    </Routes>
   );
 };
 
