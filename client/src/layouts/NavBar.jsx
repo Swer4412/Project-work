@@ -20,7 +20,7 @@ const NavBar = () => {
           </div>
         </nav>
       </header>
-      <main>
+      <main className="bg-gray-800 flex flex-col items-center justify-center h-screen">
         <Outlet />
       </main>
     </>
