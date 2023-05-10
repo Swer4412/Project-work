@@ -4,24 +4,21 @@ import NavBar from "./layouts/NavBar"
 import Elenco from './pages/Elenco'
 import Inserimento from './pages/Inserimento'
 import NotFound from './pages/NotFound'
-import Login from './pages/Login'
+import ProtectedRoutes from './ProtectedRoutes';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Login/>}>
+    <Route path="/" element={<ProtectedRoutes/>}>
       <Route path="/account" element={<NavBar/>}>
         <Route index element={<Elenco/>}/>
         <Route path="inserimento" element={<Inserimento/>}/>
       </Route>
       <Route path="*" element={<NotFound/>}/>
     </Route>
-    
   )
 )
 
-
 function App() {
-
   return (
     <>
       <RouterProvider router={router}/>

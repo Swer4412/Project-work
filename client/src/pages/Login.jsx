@@ -1,15 +1,19 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Login = (props) => {
-
+const Login = ({ onFormSubmit }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = { email, password };
-    props.onFormSubmit(formData);
-  }
+    const success = onFormSubmit(formData);
+    if (success) {
+      navigate('/account');
+    }
+  };
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 bg-gray-800">

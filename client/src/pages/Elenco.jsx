@@ -18,7 +18,7 @@ const Elenco = () => {
     const del = () => {
 
     }
-    //CAMBIA COLORE E POSIZIONE DI BOTTONI, METTI SPAZIO E DIVISORE TRA UN FORM E L'ALTRO
+    
     return (
         <div className="bg-gray-800 p-4 max-w-screen-md">
             <h1 className="text-white text-3xl font-bold mb-4">Your Media</h1>
