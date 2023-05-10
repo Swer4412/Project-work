@@ -8,13 +8,14 @@ import Login from './pages/Login'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<NavBar/>}>
-      <Route index element={<Elenco/>}/>
-      <Route path="inserimento" element={<Inserimento/>}/>
-      <Route path="login" element={<Login/>}/>
-
+    <Route path="/" element={<Login/>}>
+      <Route path="/account" element={<NavBar/>}>
+        <Route index element={<Elenco/>}/>
+        <Route path="inserimento" element={<Inserimento/>}/>
+      </Route>
       <Route path="*" element={<NotFound/>}/>
     </Route>
+    
   )
 )
 

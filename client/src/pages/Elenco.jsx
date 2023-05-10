@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {BiPencil, BiTrash} from "react-icons/bi"
 
 const Elenco = () => {
 
@@ -26,28 +27,32 @@ const Elenco = () => {
             ) : (
                 data.map((item) => (
                     item.media.map((media) => (
-                        <form key={media.id} className="flex items-start mb-4">
-                            <div className="mr-4">
-                                <img src={media.imageUrl} alt={media.title} className="rounded-lg shadow-lg w-32 h-44 object-cover" />
-                                <div className="flex justify-end items-end">
-                                    <button onClick={() => update(media.id)} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg mr-2">
-                                        Update
-                                    </button>
-                                    <button onClick={() => del(media.id)} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg">
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold mb-2 text-white">{media.title}</h3>
-                                <p className="text-gray-400 text-base">{media.description}</p>
-                                <p className="text-gray-400 text-base">{media.watchDate}</p>
-                                <p className="text-gray-400 text-base">{media.userComment}</p>
-                            </div>
-                        </form>
+                      <form key={media.id} className="flex items-start mb-4 bg-gray-900 bg-opacity-50 p-6 rounded-lg shadow-lg">
+                        <div className="mr-4">
+                          <img src={media.imageUrl} alt={media.title} className="rounded-lg shadow-lg w-32 h-44 object-cover" />
+                          <div className="flex justify-end items-end">
+                            <button onClick={() => update(media.id)} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg mr-2">
+                              <BiPencil/>
+                            </button>
+                            <button onClick={() => del(media.id)} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg">
+                              <BiTrash/>
+                            </button>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between items-center">
+                            <h3 className="text-xl font-bold mb-2 text-white">{media.title}</h3>
+                            <p className="text-xl font-bold mb-2 text-white">{media.watchDate}</p>
+                          </div>
+                          <h4 className='font-bold mb-2 text-white'>Description</h4>
+                          <p className="text-gray-400 text-base">{media.description}</p>
+                          <h4 className='font-bold mb-2 text-white'>Comment</h4>
+                          <p className="text-gray-400 text-base">{media.userComment}</p>
+                        </div>
+                      </form>
                     ))
-                ))
-
+                  ))
+                  
             )}
         </div>
     );
