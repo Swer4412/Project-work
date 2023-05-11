@@ -12,6 +12,8 @@ const Login = ({ onFormSubmit }) => {
     const success = onFormSubmit(formData);
     if (success) {
       navigate('/account');
+    } else {
+      console.log("Email e/o password errati!")
     }
   };
 

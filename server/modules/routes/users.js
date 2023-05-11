@@ -1,4 +1,4 @@
-exports.users = (app, client, database) => {
+exports.users = async (app, client, database) => {
 
     app.get("/users", async (req, res) => {
         
@@ -13,6 +13,7 @@ exports.users = (app, client, database) => {
             } else {
                 res.sendStatus(404);
             }
+
         } catch (e) {
             console.log(e)
             res.status(400)
