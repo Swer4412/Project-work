@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({ onFormSubmit }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [displayError, setDisplayError] = useState(false)
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -13,7 +14,7 @@ const Login = ({ onFormSubmit }) => {
     if (success) {
       navigate('/account');
     } else {
-      console.log("Email e/o password errati!")
+      setDisplayError(true)
     }
   };
 
@@ -45,6 +46,7 @@ const Login = ({ onFormSubmit }) => {
             <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
           </div>
         </form>
+        {displayError && <p className="text-red-500 mt-4 text-center">Invalid email or password</p>}
       </div>
     </div>
   );

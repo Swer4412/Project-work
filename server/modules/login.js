@@ -7,20 +7,27 @@ exports.login = async (app, client, database) => {
 
             //Controllo che la mail si trovi ne database
             const result = await collection
-                .find({ email: req.headers["email"] })
+                .find({ email: req.headers.email })
                 .toArray();
 
-            const bcrypt = require("bcrypt");
-            //Controllo che la passowrd sia giusta
+            if (result.length !== 0) {
 
-            const compareToken = await bcrypt.compare(
-                req.headers["password"],
+                const bcrypt = require("bcrypt");
+                //Controllo che la passowrd sia giusta
+
+                const compareToken = await bcrypt.compare(
+                req.headers.password,
                 result[0].password
-            );
+                );
+                
+                if (compareToken) {
+                    res.status(200).json({msg: "Ok"})
+                } else {
+                    res.status(401).json({msg: "Unauthorized"})
+                }
 
-            if (compareToken && result.length !== 0) {
-                res.status(200).json({msg: "Ok"})
             } else {
+
                 res.status(401).json({msg: "Unauthorized"})
             }
 

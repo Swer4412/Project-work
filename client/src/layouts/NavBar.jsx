@@ -8,7 +8,7 @@ const NavBar = () => {
         <nav className="flex justify-between items-center p-4">
           <h1 className="text-2xl font-bold"><Link to="/">MySeries</Link></h1>
           <div>
-            <NavLink to="/" className="px-4 py-2 rounded hover:bg-gray-700">
+            <NavLink to="" className="px-4 py-2 rounded hover:bg-gray-700">
               MyMedia
             </NavLink>
             <NavLink
