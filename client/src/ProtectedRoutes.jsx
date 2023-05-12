@@ -1,46 +1,59 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import Login from './pages/Login';
 import { Outlet } from "react-router-dom";
 
 export const TokenContext = createContext(null);
 
 const ProtectedRoutes = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [token, setToken] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState('');
 
-    const onFormSubmit = async (formData) => {
-        const email = formData.email;
-        const password = formData.password;
+  useEffect(() => {
+    const tokenFromSessionStorage = sessionStorage.getItem('token');
+    if (tokenFromSessionStorage) {
+      setToken(tokenFromSessionStorage);
+      setIsLoggedIn(true);
+    }
+  }, []);
 
-        try {
-            const response = await fetch("http://localhost:5000/login", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                })
-            });
+  const onFormSubmit = async (formData) => {
+    const email = formData.email;
+    const password = formData.password;
 
-            const data = await response.json();
+    try {
+      const response = await fetch("http://localhost:5000/login", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      });
 
-            if (data.token) {
-                setIsLoggedIn(true);
-                setToken(data.token);
-                return true
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+      const data = await response.json();
 
-    return (
-        <TokenContext.Provider value={token}>
-            {!isLoggedIn ? <Login onFormSubmit={onFormSubmit} /> : <Outlet />}
-        </TokenContext.Provider>
-    );
+      if (data.token) {
+        sessionStorage.setItem('token', data.token);
+        setIsLoggedIn(true);
+        setToken(data.token);
+        return true;
+      } else {
+        return false;
+      }
+
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+  return (
+    <TokenContext.Provider value={token}>
+      {!isLoggedIn ? <Login onFormSubmit={onFormSubmit} /> : <Outlet />}
+    </TokenContext.Provider>
+  );
 };
 
 export default ProtectedRoutes;

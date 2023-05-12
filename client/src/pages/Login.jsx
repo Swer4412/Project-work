@@ -7,13 +7,14 @@ const Login = ({ onFormSubmit }) => {
   const [displayError, setDisplayError] = useState(false)
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = { email, password };
-    const success = onFormSubmit(formData);
+    const success = await onFormSubmit(formData); //Metto await perchè onFormSubmit è async
     if (success) {
       navigate('/account');
     } else {
+      console.log("true")
       setDisplayError(true)
     }
   };

@@ -21,7 +21,7 @@ exports.login = async (app, client, database) => {
                 if (result.length !== 0) {
                     //Contorllo password
                     const bcrypt = require("bcrypt");
-
+                    
                     const compareToken = await bcrypt.compare(
                         password,
                         result[0].password
@@ -39,14 +39,14 @@ exports.login = async (app, client, database) => {
                         res.json({ token: token });
                         
                     } else {
-                        res.status(401).send("Password errata!")
+                        res.status(401).json("Password errata!")
                     }
 
                 } else {
-                    res.status(404).send("Email non presente nel database");
+                    res.status(404).json("Email non presente nel database");
                 }
             } else {
-                res.status(400).send("Inserisci l'email e la password nel body");
+                res.status(400).json("Inserisci l'email e la password nel body");
             }
         } catch (e) {
             console.log(e)

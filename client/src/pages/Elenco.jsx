@@ -7,11 +7,9 @@ const Elenco = () => {
     const [data, setData] = useState(undefined);
     const token = useContext(TokenContext)
 
-    console.log(token)
-
     //Pendo i dati dal backend appena viene caricata la pagina
     useEffect(() => {
-        fetch("http://localhost:5000/users", {
+        fetch("http://localhost:5000/media/get", {
           headers:{authorization:"Bearer "+token}
         })
             .then((response) => response.json())
@@ -29,7 +27,7 @@ const Elenco = () => {
         <div className="bg-gray-800 p-4 max-w-screen-md">
             <h1 className="text-white text-3xl font-bold mb-4">Your Media</h1>
             {!data ? (
-                <p>Caricamento...</p>
+                <p className='text-gray-400 text-base'>Loading...</p>
             ) : (
                 data.map((item) => (
                     item.media.map((media) => (

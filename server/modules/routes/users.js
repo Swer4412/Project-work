@@ -4,10 +4,10 @@ exports.users = async (app, client, database) => {
 
     app.get("/users", async (req, res) => {
         
-        const authenticate = auth.authentication(client, database, req)
-
+        const authenticate = await auth.authentication(client, database, req)
+        
         if (authenticate.status === 200) {
-
+            
             try {
 
                 const collection = await database.collection("data")
