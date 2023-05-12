@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {BiPencil, BiTrash} from "react-icons/bi"
+import { TokenContext } from '../ProtectedRoutes';
 
 const Elenco = () => {
 
     const [data, setData] = useState(undefined);
+    const token = useContext(TokenContext)
+
+    console.log(token)
 
     //Pendo i dati dal backend appena viene caricata la pagina
     useEffect(() => {
-        fetch("http://localhost:5000/users")
+        fetch("http://localhost:5000/users", {
+          headers:{authorization:"Bearer "+token}
+        })
             .then((response) => response.json())
             .then((data) => setData(data))
     }, [])

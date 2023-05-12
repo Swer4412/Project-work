@@ -1,40 +1,56 @@
 exports.login = async (app, client, database) => {
-    
-    app.get("/login", async (req, res) => {
-        
+    const jwt = require("jsonwebtoken");
+    //Carica il contenuto di .env (il file di questo progetto) nella proprietà process.env
+    require("dotenv").config();
+
+    app.post("/login", async (req, res) => {
         try {
-            const collection = await database.collection("data");
+            //Prendo dati dal body
+            const email = req.body.email;
+            const password = req.body.password;
 
-            //Controllo che la mail si trovi ne database
-            const result = await collection
-                .find({ email: req.headers.email })
-                .toArray();
+            if (email && password) {
 
-            if (result.length !== 0) {
+                const collection = await database.collection("data");
 
-                const bcrypt = require("bcrypt");
-                //Controllo che la passowrd sia giusta
+                //CONTROLLI NEL DATABASE
+                //Trovo l'utente con tale email
+                const result = await collection.find({ email: email }).toArray();
 
-                const compareToken = await bcrypt.compare(
-                req.headers.password,
-                result[0].password
-                );
-                
-                if (compareToken) {
-                    res.status(200).json({msg: "Ok"})
+                //Se trovo l'utente
+                if (result.length !== 0) {
+                    //Contorllo password
+                    const bcrypt = require("bcrypt");
+
+                    const compareToken = await bcrypt.compare(
+                        password,
+                        result[0].password
+                    );
+
+                    //Se la password è corretta
+                    if (compareToken) {
+                        //Controllo ruolo (rw = read and write, r = read)
+                        const role = result[0].role === "admin" ? "rw" : "r";
+
+                        const token = jwt.sign({ email: email, password: result[0].password, role: role }, process.env.JWT_SECRET, {
+                            expiresIn: "24h",
+                        });
+
+                        res.json({ token: token });
+                        
+                    } else {
+                        res.status(401).send("Password errata!")
+                    }
+
                 } else {
-                    res.status(401).json({msg: "Unauthorized"})
+                    res.status(404).send("Email non presente nel database");
                 }
-
             } else {
-
-                res.status(401).json({msg: "Unauthorized"})
+                res.status(400).send("Inserisci l'email e la password nel body");
             }
-
         } catch (e) {
-            console.log(e);
-            res.status(400).json({msg: "Bad Request"})
+            console.log(e)
+            res.sendStatus(400);
         }
-
     });
 };
