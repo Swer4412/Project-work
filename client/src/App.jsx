@@ -9,7 +9,7 @@ import ProtectedRoutes from './ProtectedRoutes';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<ProtectedRoutes/>}>
-      <Route path="/account" element={<NavBar/>}>
+      <Route path="account" element={<NavBar/>}>
         <Route index element={<Elenco/>}/>
         <Route path="inserimento" element={<Inserimento/>}/>
       </Route>

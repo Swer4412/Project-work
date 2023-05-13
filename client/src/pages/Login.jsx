@@ -14,7 +14,6 @@ const Login = ({ onFormSubmit }) => {
     if (success) {
       navigate('/account');
     } else {
-      console.log("true")
       setDisplayError(true)
     }
   };

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TokenContext } from '../ProtectedRoutes';
 
 const Inserimento = () => {
     const [title, setTitle] = useState("")
@@ -15,6 +16,7 @@ const Inserimento = () => {
     const [displayError, setDisplayError] = useState(false)
 
     const navigate = useNavigate();
+    const token = useContext(TokenContext)
 
     //Fetch dinamico in base al titolo
     useEffect(() => {
@@ -37,14 +39,23 @@ const Inserimento = () => {
     }, [title]);
 
     const ok = async () => {
-        console.log(isLoading)
+
+        //Check che tutti i campi siano pieni
+        if (!title || !watchDate || !userComment || !apiTitle) {
+            setDisplayError(true);
+            return;
+          } else {
+            setDisplayError(false);
+          }
+        
         if (!isLoading) {
             try {
 
                 const response = await fetch("http://localhost:5000/media/add", {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        authorization:"Bearer "+ token
                     },
                     body: JSON.stringify({
                         id: apiId,
@@ -56,11 +67,7 @@ const Inserimento = () => {
                     })
                 });
 
-                if (response.status === 200) {
-                    navigate("/account")
-                } else {
-                    setDisplayError(true)
-                }
+                response.status === 200 && navigate("/account")
 
             } catch (error) {
                 console.error(error);
@@ -74,11 +81,11 @@ const Inserimento = () => {
         <div className="bg-gray-800 p-4">
             <form>
                 <label className="block mb-2 text-white">Inserisci titolo</label>
-                <input value={title} onChange={(e) => setTitle(e.target.value)} name="title" className="border rounded-lg py-2 px-4 mb-2 w-full" required></input>
+                <input value={title} onChange={(e) => setTitle(e.target.value)} name="title" className="border rounded-lg py-2 px-4 mb-2 w-full"></input>
                 <label className="block mb-2 text-white">Inserisci data di visione</label>
-                <input value={watchDate} onChange={(e) => setWatchDate(e.target.value)} name="watchDate" className="border rounded-lg py-2 px-4 mb-2 w-full" required></input>
+                <input value={watchDate} onChange={(e) => setWatchDate(e.target.value)} name="watchDate" type="date" className="border rounded-lg py-2 px-4 mb-2 w-full"></input>
                 <label className="block mb-2 text-white">Inserisci commento</label>
-                <textarea value={userComment} onChange={(e) => setUserComment(e.target.value)} name="userComment" className="border rounded-lg py-2 px-4 mb-2 w-full" required></textarea>
+                <textarea value={userComment} onChange={(e) => setUserComment(e.target.value)} name="userComment" className="border rounded-lg py-2 px-4 mb-2 w-full"></textarea>
 
             </form>
             <hr className="my-4" />
@@ -96,11 +103,11 @@ const Inserimento = () => {
                 <button onClick={() => navigate('/account')} className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 mr-2 rounded">
                     Cancel
                 </button>
-                <button onClick={() => ok}className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                <button onClick={() => ok()}className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                     OK
                 </button>
             </div>
-            {displayError && <p className="text-red-500 mt-4 text-center">Invalid email or password</p>}
+            {displayError && <p className="text-red-500 mt-4 text-right">Inserisci tutti i campi!</p>}
         </div>
     );
 };
