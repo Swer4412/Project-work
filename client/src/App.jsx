@@ -5,6 +5,7 @@ import Elenco from './pages/Elenco'
 import Inserimento from './pages/Inserimento'
 import NotFound from './pages/NotFound'
 import ProtectedRoutes from './ProtectedRoutes';
+import Modifica from './pages/Modifica'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -12,6 +13,7 @@ const router = createBrowserRouter(
       <Route path="account" element={<NavBar/>}>
         <Route index element={<Elenco/>}/>
         <Route path="inserimento" element={<Inserimento/>}/>
+        <Route path="modifica" element={<Modifica/>}/>
       </Route>
       <Route path="*" element={<NotFound/>}/>
     </Route>

@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TokenContext } from '../ProtectedRoutes';
+import { useLocation } from 'react-router-dom';
 
-const Inserimento = () => {
-    
+const Modifica = () => {
+
+    const location = useLocation();
+    const id = new URLSearchParams(location.search).get('id');
+
     const [title, setTitle] = useState("")
     const [watchDate, setWatchDate] = useState("")
     const [userComment, setUserComment] = useState("")
@@ -18,6 +22,19 @@ const Inserimento = () => {
 
     const navigate = useNavigate();
     const token = useContext(TokenContext)
+
+    //Cerco tutti i dati in base al id passato da elenco
+    useEffect(() => {
+        fetch("http://localhost:5000/media/get/" + id, {
+          headers: { authorization: "Bearer " + token }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setTitle(data.title)
+            setWatchDate(data.watchDate)
+            setUserComment(data.userComment)
+          })
+      }, [])
 
     //Fetch dinamico in base al titolo
     useEffect(() => {
@@ -39,8 +56,8 @@ const Inserimento = () => {
         return () => clearTimeout(delay); // Clear timeout on unmount
     }, [title]);
 
-    //Quando viene cliccato il bottone ok
-    const ok = async () => {
+    //Quando viene cliccato il bottone update
+    const update = async () => {
 
         //Check che tutti i campi siano pieni
         if (!title || !watchDate || !userComment || !apiTitle) {
@@ -54,8 +71,8 @@ const Inserimento = () => {
         if (!isLoading) {
             try {
 
-                const response = await fetch("http://localhost:5000/media/add", {
-                    method: 'POST',
+                const response = await fetch("http://localhost:5000/media/update/"+id, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                         authorization:"Bearer "+ token
@@ -107,8 +124,8 @@ const Inserimento = () => {
                 <button onClick={() => navigate('/account')} className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 mr-2 rounded">
                     Cancel
                 </button>
-                <button onClick={() => ok()}className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    OK
+                <button onClick={() => update()}className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Update
                 </button>
             </div>
             {displayError && <p className="text-red-500 mt-4 text-right">Inserisci tutti i campi!</p>}
@@ -116,4 +133,4 @@ const Inserimento = () => {
     );
 };
 
-export default Inserimento;
+export default Modifica;

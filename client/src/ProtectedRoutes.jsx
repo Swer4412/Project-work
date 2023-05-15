@@ -8,7 +8,8 @@ const ProtectedRoutes = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState('');
 
-  useEffect(() => {
+  //Check se il token è gia stato assegnato
+  useEffect(() => { //Viene eseguito subito
     const tokenFromSessionStorage = sessionStorage.getItem('token');
     if (tokenFromSessionStorage) {
       setToken(tokenFromSessionStorage);
@@ -17,9 +18,11 @@ const ProtectedRoutes = () => {
   }, []);
 
   const onFormSubmit = async (formData) => {
+    //Prendo i dati passati dal form di login    
     const email = formData.email;
     const password = formData.password;
 
+    //Mando la richiesta di login all api
     try {
       const response = await fetch("http://localhost:5000/login", {
         method: 'POST',
@@ -34,6 +37,7 @@ const ProtectedRoutes = () => {
 
       const data = await response.json();
 
+      //Se l'api mi ha risposto con un token nel body
       if (data.token) {
         sessionStorage.setItem('token', data.token);
         setIsLoggedIn(true);

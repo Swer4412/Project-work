@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BiPencil, BiTrash } from "react-icons/bi"
 import { TokenContext } from '../ProtectedRoutes';
+import { useNavigate } from 'react-router-dom';
 
 const Elenco = () => {
 
   const [data, setData] = useState(undefined);
   const token = useContext(TokenContext)
+  const navigate = useNavigate()
 
   //Pendo i dati dal backend appena viene caricata la pagina
   useEffect(() => {
@@ -16,9 +18,11 @@ const Elenco = () => {
       .then((data) => setData(data))
   }, [])
 
-  const update = () => {
-
+  //Quando viene cliccato il bottone modifica
+  const update = (id) => {
+    navigate("modifica?id="+id)
   }
+  //Quando viene cliccato il bottone delete
   const del = (id) => {
     fetch("http://localhost:5000/media/delete/"+id, {
       method: 'DELETE',
@@ -29,6 +33,7 @@ const Elenco = () => {
   }).then((response)=> {
 
     //Se l'api mi risponde ok refresho la pagina altrimenti do un errore
+    //Questo perchè è più facile eliminare dal database e refreshare la pagina, rispetto a modificare anche la pagina 
     if (response.status===200) {
       window.location.reload();
     } else {
