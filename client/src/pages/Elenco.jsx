@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BiPencil, BiTrash } from "react-icons/bi"
 import { TokenContext } from '../ProtectedRoutes';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Elenco = () => {
 
   const [data, setData] = useState(undefined);
+  const [cont, setCont] = useState(0)
   const token = useContext(TokenContext)
   const navigate = useNavigate()
 
@@ -15,7 +16,11 @@ const Elenco = () => {
       headers: { authorization: "Bearer " + token }
     })
       .then((response) => response.json())
-      .then((data) => setData(data))
+      .then((data) => {
+        //Imposto lo state data e il contatore di media
+        setData(data)
+        setCont(data[0].media.length);
+      })
   }, [])
 
   //Quando viene cliccato il bottone modifica
@@ -45,12 +50,11 @@ const Elenco = () => {
 
   return (
     <div className="bg-gray-800 p-4 max-w-screen-md">
-      <h1 className="text-white text-3xl font-bold mb-4">Your Media</h1>
-      {!data ? (
-        <p className='text-gray-400 text-base'>Loading...</p>
+      <h1 className="text-white text-3xl font-bold mb-4">Your Media ({cont})</h1>
+      {!data || data[0].media.length === 0 ? ( //Guardo se l'api mi ha restituito dei dati e se tali dati contengono qualcosa
+        <p className='text-gray-400 text-base'><Link to="inserimento">Non hai media, inserisci qualcosa!</Link></p>
       ) : (
-        data.map((item) => (
-          item.media.map((media) => (
+        data[0].media.map((media) => (
             <form key={media.id} className="flex items-start mb-4 bg-gray-900 bg-opacity-50 p-6 rounded-lg shadow-lg">
               <div className="mr-4">
                 <img src={media.imageUrl} alt={media.title} className="rounded-lg shadow-lg w-32 h-44 object-cover" />
@@ -63,7 +67,7 @@ const Elenco = () => {
                   </button>
                 </div>
               </div>
-              <div className='flex-shrink-0'>
+              <div className='flex-grow'>
                 <div className="flex justify-between items-center">
                   <h3 className="text-xl font-bold mb-2 text-white">{media.title}</h3>
                   <p className="text-xl font-bold mb-2 text-white">{media.watchDate}</p>
@@ -75,7 +79,6 @@ const Elenco = () => {
               </div>
             </form>
           ))
-        ))
 
       )}
     </div>

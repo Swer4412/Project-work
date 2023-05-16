@@ -47,6 +47,7 @@ exports.media = (app, client, database) => {
                             res.send(media);
                         }
                     });
+                    
                 } else {
                     res.sendStatus(404);
                 }

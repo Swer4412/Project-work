@@ -1,7 +1,14 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
+import { BiLogOut } from "react-icons/bi"
 
 const NavBar = () => {
+
+  const LogoutRedirect = () => {
+    sessionStorage.setItem("token", "")
+    window.location.reload();
+  }
+
   return (
     <>
       <header className="bg-gray-900 text-white sticky top-0 z-50">
@@ -17,6 +24,9 @@ const NavBar = () => {
             >
               Inserisci
             </NavLink>
+            <button onClick={() => {LogoutRedirect()}} className="px-4 py-2 rounded hover:bg-gray-700">
+              <BiLogOut/>
+            </button>
           </div>
         </nav>
       </header>

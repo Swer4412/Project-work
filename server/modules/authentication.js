@@ -17,7 +17,6 @@ exports.authentication = async (client, database, req) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         email = decoded.email
-
         status = 200
         
     } catch (e) {
